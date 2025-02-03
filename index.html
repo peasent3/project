@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32-CAM Live Stream</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #333;
+        }
+        img {
+            border: 2px solid #333;
+            width: 640px;
+            height: 480px;
+        }
+    </style>
+</head>
+<body>
+    <h1>ESP32-CAM Live Stream</h1>
+    <img id="videoFeed" src="" alt="Video Feed">
+    <script>
+        const videoFeed = document.getElementById('videoFeed');
+        const esp32Url = 'http://<ESP32-CAM-IP>/stream';
+
+        async function fetchFrame() {
+            try {
+                const response = await fetch(esp32Url);
+                if (response.ok) {
+                    const blob = await response.blob();
+                    videoFeed.src = URL.createObjectURL(blob);
+                } else {
+                    console.error('Failed to fetch frame:', response.status);
+                }
+            } catch (error) {
+                console.error('Error fetching frame:', error);
+            }
+        }
+
+        setInterval(fetchFrame, 100); // Fetch a new frame every 100ms
+    </script>
+</body>
