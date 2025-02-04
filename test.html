@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32-CAM Pan and Tilt Control</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .button {
+            background-color: #2f4468;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            margin: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #1f2f44;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+        }
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>ESP32-CAM Pan and Tilt</h1>
+    <div>
+        <img id="cameraFeed" src="" alt="Camera Feed">
+    </div>
+    <div class="controls">
+        <button class="button" onmousedown="sendCommand('up');" ontouchstart="sendCommand('up');">Up</button>
+        <button class="button" onmousedown="sendCommand('left');" ontouchstart="sendCommand('left');">Left</button>
+        <button class="button" onmousedown="sendCommand('right');" ontouchstart="sendCommand('right');">Right</button>
+        <button class="button" onmousedown="sendCommand('down');" ontouchstart="sendCommand('down');">Down</button>
+    </div>
+
+    <script>
+        // Replace with the IP address of your ESP32 camera
+        const esp32Ip = 'http://192.168.0.104'; 
+
+        // Update the camera feed stream URL
+        document.getElementById('cameraFeed').src = esp32Ip + ":81/stream"; 
+
+        // Function to send the servo movement command to ESP32
+        function sendCommand(action) {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", `${esp32Ip}/action?go=${action}`, true);
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
