@@ -8,7 +8,7 @@ const server = http.createServer((req,res) => {
     res.writeHead(200, {'Content-Type': 'text/html'});
 
       // read the html file
-    fs.readFile('index.html', (err, data) => {
+    fs.readFile('test.html', (err, data) => {
     if (err) {
       // handle error
       res.writeHead(404);
