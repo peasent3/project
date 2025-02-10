@@ -18,7 +18,7 @@ wss.on('connection', (ws) => {
   console.log('Client connected');
   
   // Fetch the MJPEG stream from the ESP32
-  const esp32Stream = require('http').get('http://ESP32_IP/video', (res) => {
+  const esp32Stream = require('http').get('http://192.168.1.104/capture', (res) => {
     res.on('data', (chunk) => {
       // Send the MJPEG frame to the client
       ws.send(chunk);
