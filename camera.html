@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<%- include('./partials/head.ejs') %>
+<body class="page_display">
+    <div class="main_content">
+        <div class="page_title"><h1 class="tcenter">Camera relay</h1></div>
+        <div class="tcenter">
+            <img id="jpgstream" class="jpgstream" src="" />
+        </div>
+    </div>
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+    var socket = io();
+    
+    socket.emit("webuser",{});
+
+    socket.on('jpgstream_client', function(msg) {
+        console.log(msg);
+        var x = document.getElementsByTagName("img").item(0);
+        x.setAttribute("src", 'data:image/jpg;base64,'+msg.picture);        
+    });
+    </script>
+</body>
+</html>
