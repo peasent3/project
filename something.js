@@ -10,7 +10,7 @@ const wss = new WebSocket.Server({ server });
 
 // Serve HTML page with video stream
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile('/index.html');
 });
 
 // Handle WebSocket connections
