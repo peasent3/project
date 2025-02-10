@@ -1,7 +1,7 @@
 #include <WiFi.h>
 #include <WiFiClient.h>
+#include <WebServer.h>
 #include "esp_camera.h"
-#include <ESPAsyncWebServer.h>
 
 // Replace with your network credentials
 const char* ssid = "YOUR_SSID";
@@ -11,8 +11,8 @@ const char* password = "YOUR_PASSWORD";
 #define CAMERA_MODEL_AI_THINKER
 #include "camera_pins.h"
 
-// Create an AsyncWebServer object on port 80
-AsyncWebServer server(80);
+// Create an instance of WebServer on port 80
+WebServer server(80);
 
 void setup() {
   // Start serial communication
@@ -56,33 +56,41 @@ void setup() {
     return;
   }
 
-  // Route to stream MJPEG video
-  server.on("/video", HTTP_GET, [](AsyncWebServerRequest *request){
-    WiFiClient client = request->client();
+  // Serve MJPEG stream at /video
+  server.on("/video", HTTP_GET, [](){
+    WiFiClient client = server.client();
     camera_fb_t *fb = NULL;
 
-    request->send_P(200, "multipart/x-mixed-replace; boundary=frame", [](uint8_t *buffer, size_t maxLen, size_t index){
-      static size_t len = 0;
-      camera_fb_t *fb = esp_camera_fb_get();
+    server.sendHeader("Cache-Control", "no-cache");
+    server.sendHeader("Connection", "close");
+    server.send(200, "multipart/x-mixed-replace; boundary=frame", "");
 
+    while (client.connected()) {
+      fb = esp_camera_fb_get();
       if (!fb) {
         Serial.println("Camera capture failed");
-        return 0;
+        return;
       }
 
-      len = fb->len;
-      memcpy(buffer, fb->buf, len);
+      // Send MJPEG frame to client
+      client.write("--frame\r\n");
+      client.write("Content-Type: image/jpeg\r\n");
+      client.write("Content-Length: ");
+      client.write(String(fb->len).c_str());
+      client.write("\r\n\r\n");
+      client.write(fb->buf, fb->len);
+      client.write("\r\n");
+
       esp_camera_fb_return(fb);
 
-      return len;
-    });
+      delay(30);  // Stream frame every 30ms (approximately 30fps)
+    }
   });
 
-  // Start server
+  // Start the web server
   server.begin();
 }
 
 void loop() {
-  // Nothing to do in the loop
+  server.handleClient();  // Handle incoming requests
 }
-
