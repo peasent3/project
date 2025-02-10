@@ -10,7 +10,7 @@ const wss = new WebSocket.Server({ server });
 
 // Serve HTML page with video stream
 app.get('/', (req, res) => {
-  res.sendFile('/index.html');
+  res.sendFile(__dirname + '/index.html');
 });
 
 // Handle WebSocket connections
@@ -18,7 +18,7 @@ wss.on('connection', (ws) => {
   console.log('Client connected');
   
   // Fetch the MJPEG stream from the ESP32
-  const esp32Stream = require('http').get('http://192.168.1.104/capture', (res) => {
+  const esp32Stream = require('http').get('http://192.168.1.104/video', (res) => {
     res.on('data', (chunk) => {
       // Send the MJPEG frame to the client
       ws.send(chunk);
