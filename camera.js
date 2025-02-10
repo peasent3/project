@@ -4,7 +4,7 @@ const app = express();
 const port = 3000;
 
 // Replace with your ESP32-CAM IP address
-const esp32CamUrl = 'http://192.168.1.24/capture';
+const esp32CamUrl = 'http://192.168.1.104/capture';
 
 app.get('/capture', async (req, res) => {
   try {
