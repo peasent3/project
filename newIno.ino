@@ -4,8 +4,8 @@
 #include "esp_camera.h"
 
 // Replace with your network credentials
-const char* ssid = "YOUR_SSID";
-const char* password = "YOUR_PASSWORD";
+const char* ssid = "history";
+const char* password = "electrotech";
 
 // Camera configuration
 #define CAMERA_MODEL_AI_THINKER
