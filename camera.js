@@ -2,6 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 const port = 3000;
+const hostname = '192.168.1.122';
 
 // Replace with your ESP32-CAM IP address
 const esp32CamUrl = 'http://192.168.1.104/capture';
@@ -33,6 +34,10 @@ const server = http.createServer((req,res) => {
     // end the response
     res.end();
   });
+});
+
+server.listen(port, hostname, () => {
+    console.log('Server running at http://${hostname}:${port}/');
 });
 
 app.listen(port, () => {
