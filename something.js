@@ -21,6 +21,7 @@ wss.on('connection', (ws) => {
   const esp32Stream = require('http').get('http://192.168.1.104/video', (res) => {
     res.on('data', (chunk) => {
       // Send the MJPEG frame to the client
+      console.log('Received chunk size', chunk.length);
       ws.send(chunk);
     });
   });
