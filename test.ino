@@ -14,7 +14,7 @@ const char* ssid = "history";
 const char* password = "electrotech";
 
 // External web server information
-const char* serverName = "http:bluenix.local:8000/project/tet.html";
+const char* serverName = "http://bluenix.local:3000";
 
 // Pin definitions for servo motors
 #define SERVO_1      14
